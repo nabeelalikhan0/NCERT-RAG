@@ -31,11 +31,20 @@ class RAGService:
             self.embedding_manager
         )
 
-    def index_directory(self, directory):
+    def index_directory(self, directory, force=False):
+        if not force and self.vector_store.collection.count() > 0:
+            print(f"Vector store already contains {self.vector_store.collection.count()} documents. Skipping indexing. Use force=True to re-index.")
+            return
 
         docs = process_all_pdfs(directory)
+        if not docs:
+            print(f"Warning: No documents were found or successfully loaded from directory: {directory}")
+            return
 
         chunks = split_documents(docs)
+        if not chunks:
+            print(f"Warning: No text chunks could be generated from the loaded documents.")
+            return
 
         embeddings = self.embedding_manager.generate_embeddings(
             [d.page_content for d in chunks]

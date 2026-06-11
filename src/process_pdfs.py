@@ -26,10 +26,10 @@ def process_all_pdfs(pdf_directory):
                 doc.metadata["source_file"] = pdf_file.name
                 doc.metadata["file_type"] = "pdf"
             all_documents.extend(documents)
-            print(f"✅ Loaded {len(documents)} pages")
+            print(f"[OK] Loaded {len(documents)} pages")
 
         except Exception as e:
-            print(f"❌ Error: {e}")
+            print(f"[ERROR] Error processing {pdf_file.name}: {e}")
 
     print(f"Total documents loaded: {len(all_documents)}")
     return all_documents
